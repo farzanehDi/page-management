@@ -23,5 +23,4 @@ mongoose.connect(config.MONGOURI, {useNewUrlParser: true,useUnifiedTopology:true
     })
     .catch(err=>{
         console.log(err);
-
     });

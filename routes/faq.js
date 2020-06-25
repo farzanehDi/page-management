@@ -40,7 +40,7 @@ router.post('/api/add_faq',authenticate,async(req,res)=>{
 });
 
 //**delete faq**
-router.post('/api/delete_faq',authenticate,async (req,res)=>{
+router.delete('/api/delete_faq',authenticate,async (req,res)=>{
 
     const body=await req.body;
 
@@ -58,9 +58,9 @@ router.post('/api/delete_faq',authenticate,async (req,res)=>{
 });
 
 //**get faqs**
-router.get('/api/faqs',authenticate,async (req,res)=>{
+router.get('/api/faqs/:id',authenticate,async (req,res)=>{
 
-    const id=await req.query.id;
+    const id=await req.params.id;
     try {
         let data=await Faq.findOne({pageId:id});
         if(data){

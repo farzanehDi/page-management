@@ -48,17 +48,15 @@ router.get('/api/pages',authenticate,async (req,res)=>{
 });
 
 //**search page by url ans pass pageId**
-router.get('/api/search_page',authenticate,async (req,res)=>{
+router.get('/api/search_page/:search_phrase',authenticate,async (req,res)=>{
 
-    let search_phrase=await req.query.search_phrase.trim();
+    let search_phrase=await req.params.search_phrase.trim();
 
     try {
-
         let foundPages=await Page.find({url:{ "$regex":search_phrase, "$options": "i" }});
         // console.log('------------------------\n',foundPages);
         let passedData=foundPages.map(value=>{return {id:value._id,title:value.title}});
         successFn(res,true,{items:passedData})
-
     }catch (e) {
         successFn(res,false,{message:'خطا در جستجوی صفحات'});
     }
@@ -66,9 +64,9 @@ router.get('/api/search_page',authenticate,async (req,res)=>{
 });
 
 //**page details**
-router.get("/api/page_details",authenticate,async (req,res)=>{
+router.get("/api/page_details/:id",authenticate,async (req,res)=>{
 
-    const PageId=await req.query.id;
+    const PageId=await req.params.id;
     try {
         const searchedPage=await Page.findById(PageId);
         if (searchedPage){

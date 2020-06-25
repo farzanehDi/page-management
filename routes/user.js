@@ -8,7 +8,7 @@ const {successFn}=require("../utils");
 
 const storageProfile=multer.diskStorage({
     destination:(req,file,cb)=>{
-        cb(null,'../uploads/profilePicture')
+        cb(null,'./uploads/profilePicture')
     },
     filename:(req,file,cb)=>{
         cb(null,new Date().toISOString().replace(/:/g, '-')+file.originalname)
@@ -62,9 +62,18 @@ router.post('/api/login',async (req,res)=>{
     }
 
 });
+//**get user information**
+router.get('/api/user_info',authenticate,async (req,res)=>{
+    try {
+        let user=await User.findByToken(req.header('token'));
+        successFn(res,true,{fullName:user.fullName,image:user.image,username:user.username});
+    }catch (e) {
+        successFn(res,false,{message:'کاربر یافت نشد'});
+    }
+});
 
 //**update user**
-router.post('/api/update_user',authenticate,uploadProfile.single('image'),async (req,res)=>{
+router.put('/api/update_user',authenticate,uploadProfile.single('image'),async (req,res)=>{
 
     let image;
     if (!req.file) {
